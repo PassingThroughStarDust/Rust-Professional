@@ -15,7 +15,32 @@ use std::fmt::{self, Display, Formatter};
 
 pub fn find_missing_number(nums: Vec<i32>) -> i32 {
     // TODO: Implement the logic to find the missing number
-    0 // Placeholder return value
+
+    // Analysis: requires time complexity O(n), but iterating the whole vector, which is inevitable,
+    // has already reach O(n), so it's better to use some methods to get the result by using all elements at once.
+    // mathematical method is a good way. By using the fomula of the  sum of the first n terms of the series of equal differences,
+    // the aim could be reached.
+
+    let mut sum = 0;
+    let mut max = nums[0];
+    let mut min = nums[0];
+
+    for i in &nums {
+        sum += *i;
+
+        if max < *i {
+            max = *i;
+        }
+        if min > *i {
+            min = *i;
+        }
+    }
+
+    if min > 1 {
+        1
+    } else {
+        (max + min) * (nums.len() as i32 + 1) / 2 - sum // Placeholder return value
+    }
 }
 
 #[cfg(test)]

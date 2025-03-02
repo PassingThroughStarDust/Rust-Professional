@@ -69,14 +69,47 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
+}
+
+impl<T: std::cmp::PartialOrd + Copy + std::fmt::Display> LinkedList<T> {
+	pub fn merge(mut list_a:LinkedList<T>, mut list_b:LinkedList<T>) -> Self
 	{
 		//TODO
-		Self {
+		/*Self {
             length: 0,
             start: None,
             end: None,
+        } */
+        let mut list_c: LinkedList<T> = Self::new();
+
+        let len: i32 = if list_a.length < list_b.length { list_a.length } else { list_b.length } as i32;
+        let mut i: i32 = 0;
+        let mut j: i32 = 0;
+        while i < len && j < len {
+            // can't avoid copying type T (tried NonNull<T> but it's also forbidden to copy), so use raw pointers;
+            let a = *list_a.get(i).clone().unwrap();
+            let b = *list_b.get(j).clone().unwrap();
+                
+            if a <= b {
+                list_c.add(a);
+                i += 1;
+            } else {
+                list_c.add(b);
+                j += 1;
+            }
         }
+
+        while i < list_a.length as i32 {
+            list_c.add(*list_a.get(i).unwrap());
+            i += 1;
+        }
+
+        while j < list_b.length as i32 {
+            list_c.add(*list_b.get(j).unwrap());
+            j += 1;
+        }
+
+        list_c
 	}
 }
 

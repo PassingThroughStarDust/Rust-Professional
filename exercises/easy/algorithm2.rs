@@ -5,6 +5,7 @@
 
 
 use std::fmt::{self, Display, Formatter};
+use std::mem::swap;
 use std::ptr::NonNull;
 use std::vec::*;
 
@@ -74,6 +75,18 @@ impl<T> LinkedList<T> {
     }
 	pub fn reverse(&mut self){
 		// TODO
+        let mut next = self.start;
+
+        // NonNull can't be dereferenced like Box do, so it must be transformed into null pointer first
+        unsafe {
+            while let Some(element) = next {
+                let ptr = element.as_ptr();
+                next = (*ptr).next;
+                std::mem::swap(&mut (*ptr).prev, &mut (*ptr).next);
+            }
+        }
+
+        std::mem::swap(&mut self.start, &mut self.end);
 	}
 }
 

@@ -9,11 +9,30 @@
     Hint: Consider normalizing the string by converting it to lowercase and removing non-alphabetical characters before checking.
 */
 
-use std::fmt::{self, Display, Formatter};
+use std::{fmt::{self, Display, Formatter}, vec};
 
 pub fn is_palindrome(s: String) -> bool {
     // TODO: Implement the logic to check if the string is a palindrome
-    false // Placeholder return value
+    let s = s.to_uppercase();
+    let mut v: Vec<char> = Vec::new(); // Use vector as a statck 
+    for i in s.chars() {
+        if 'A' <= i && i <= 'Z' {
+            v.push(i);
+        }
+    }
+
+    let mut i: usize = 0;
+    let last: usize = v.len() - 1;
+    while i < v.len() / 2 {
+        println!("{} vs {}", v[i] , v[last - i]);
+        if v[i] != v[last - i] {
+            return false;   
+        }
+
+        i += 1;
+    }
+
+    true // Placeholder return value
 }
 
 #[cfg(test)]

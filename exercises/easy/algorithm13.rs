@@ -13,9 +13,89 @@
 
 use std::fmt::{self, Display, Formatter};
 
+// add a sort function;
+fn quick_sort<T1: PartialOrd + Copy>(array: &mut [T1], l: usize, r: usize) {
+    if l >= r {
+        return;
+    }
+
+    let x = array[l];
+    let mut i = l as i32 - 1;
+    let mut j = r as i32 + 1;
+
+    while i < j {
+        loop {
+            i += 1;
+            if array[i as usize] >= x {
+                break;
+            }
+        }
+        
+        loop {
+            j-=1;
+            if array[j as usize] <= x {
+                break;
+            }
+        }
+
+        if i < j {
+            let a = array[i as usize];
+            array[i as usize] = array[j as usize];
+            array[j as usize] = a;
+        } 
+    }
+
+    quick_sort(array, l as usize, j as usize);
+    quick_sort(array, j as usize + 1, r as usize);
+}
+
+const N: usize = 100;
 pub fn are_anagrams(s1: String, s2: String) -> bool {
     // TODO: Implement the logic to check if two strings are anagrams
-    false // Placeholder return value
+    
+    let mut a: [char; N] = ['a'; N];
+    let mut b: [char; N] = ['a'; N];
+    let mut sum: usize = 0;
+
+    let mut idx: usize = 0;
+    let s: String = s1.to_uppercase();
+    for i in s.chars() {
+        if 'A' <= i && i <= 'Z' {
+            a[idx] = i;
+            idx += 1;
+            sum += 1;
+        }
+    }
+
+    idx = 0;
+    let s: String = s2.to_uppercase();
+    for i in s.chars() {
+        if 'A' <= i && i <= 'Z' {
+            b[idx] = i;
+            idx += 1;
+            sum -= 1;
+        }
+    }
+
+    if sum != 0 {
+        return false;
+    }
+
+    let l: usize = s1.len();
+
+    quick_sort(&mut a, 0, l - 1);
+    quick_sort(&mut b, 0, l - 1);
+
+    idx = 0;
+
+    while idx < l {
+        if a[idx] != b[idx] {
+            return false;
+        }
+        idx += 1;
+    }
+    
+    true // Placeholder return value
 }
 
 #[cfg(test)]

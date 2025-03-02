@@ -11,11 +11,24 @@
     Hint: You can start by sorting the intervals by their starting point and then merge them one by one.
 */
 
+use std::cmp::max;
 use std::fmt::{self, Display, Formatter};
 
 pub fn merge_intervals(intervals: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
     // TODO: Implement the logic to merge overlapping intervals
-    Vec::new() // Placeholder return value
+    let mut temp = intervals.clone();
+    temp.sort_by(|a, b| a[0].cmp(&b[0]));
+    let mut index = 0;
+    while index < temp.len() - 1 {
+        if temp[index + 1][0] <= temp[index][1] {
+            temp[index][1] = max(temp[index][1], temp[index + 1][1]);
+            temp.remove(index + 1);
+        } else {
+            index += 1;
+        }
+    }
+
+    temp // Placeholder return value
 }
 
 #[cfg(test)]
